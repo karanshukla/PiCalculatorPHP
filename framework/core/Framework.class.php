@@ -1,9 +1,11 @@
+<?php
+
 class Framework {
 
 
    public static function run() {
 
-//        echo "run()";
+       echo "run()";
 
        self::init();
 
@@ -91,13 +93,47 @@ class Framework {
 
    private static function autoload() {
 
+  spl_autoload_register(array(__CLASS__,'load'));
+
 
    }
 
 
    private static function dispatch() {
 
+    // Instantiate the controller class and call its action method
 
-   }
+    $controller_name = CONTROLLER . "Controller";
+
+    $action_name = ACTION . "Action";
+
+    $controller = new $controller_name;
+
+    $controller->$action_name();
+
+  }
+
+   private static function load($classname){
+
+
+    // Here simply autoload app’s controller and model classes
+
+    if (substr($classname, -10) == "Controller"){
+
+        // Controller
+
+        require_once CURR_CONTROLLER_PATH . "$classname.class.php";
+
+    } elseif (substr($classname, -5) == "Model"){
+
+        // Model
+
+        require_once  MODEL_PATH . "$classname.class.php";
+
+    }
+
+  }
 
 }
+
+?>s
